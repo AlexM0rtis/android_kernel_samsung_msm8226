@@ -632,12 +632,10 @@ inline int avc_has_perm_noaudit(u32 ssid, u32 tsid,
 	BUG_ON(!requested);
 	rcu_read_lock();
 	node = avc_lookup(ssid, tsid, tclass);
-	if (unlikely(!node)) {
+	if (unlikely(!node))
 		node = avc_compute_av(ssid, tsid, tclass, avd);
-	} else {
+	else
 		memcpy(avd, &node->ae.avd, sizeof(*avd));
-		avd = &node->ae.avd;
-	}
 	denied = requested & ~(avd->allowed);
 	if (unlikely(denied))
 		rc = avc_denied(ssid, tsid, tclass, requested, flags, avd);
